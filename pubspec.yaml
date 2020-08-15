@@ -1,0 +1,28 @@
+name: worklifebellapp
+description: A new Flutter application.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.3
+  flutter_bloc: ^4.0.0
+  rxdart: ^0.24.0
+  equatable: ^1.1.1
+  path_provider: ^1.6.5
+  location_permissions: ^2.0.5
+  background_locator: ^1.1.3+1
+  background_location: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
