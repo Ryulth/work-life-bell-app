@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:worklifebellapp/bloc/coordinate_bloc.dart';
-import 'package:worklifebellapp/event/coordinate_event.dart';
-import 'package:worklifebellapp/state/coordinate_state.dart';
+import 'package:worklifebellapp/bloc/locator_bloc.dart';
+import 'package:worklifebellapp/event/locator_event.dart';
+import 'package:worklifebellapp/state/locator_state.dart';
 
-class CoordinatePage extends StatelessWidget {
+class LocatorPage extends StatelessWidget {
 
-  CoordinatePage({Key key, this.title}) : super(key: key);
+  LocatorPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
   Widget build(BuildContext context) {
     // ignore: close_sinks
-    final CoordinateBloc coordinateBloc = BlocProvider.of<CoordinateBloc>(context);
+    final LocatorBloc locatorBloc = BlocProvider.of<LocatorBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CoordinateBloc, CoordinateState>(
+      body: BlocBuilder<LocatorBloc, LocatorState>(
         builder: (context, state) {
-          if(state is CoordinateLoaded) {
+          if(state is LocatorLoaded) {
             return Center(
               child: Text(
                 '${state.locationDto.toString()}',
@@ -45,7 +45,7 @@ class CoordinatePage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.star),
               onPressed: () {
-                coordinateBloc.add(CoordinateLoggingStart());
+                locatorBloc.add(LocatorLoggingStart());
               },
             ),
           ),
@@ -54,7 +54,7 @@ class CoordinatePage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.stop),
               onPressed: () {
-                coordinateBloc.add(CoordinateLoggingStop());
+                locatorBloc.add(LocatorLoggingStop());
               },
             ),
           )

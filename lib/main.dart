@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:worklifebellapp/bloc/coordinate_bloc.dart';
+import 'package:worklifebellapp/bloc/locator_bloc.dart';
 import 'package:worklifebellapp/event/counter_event.dart';
-import 'package:worklifebellapp/page/coordinate_page.dart';
+import 'package:worklifebellapp/page/locator_page.dart';
 import 'package:worklifebellapp/state/counter_state.dart';
 
 import 'bloc/counter_bloc.dart';
@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-        create: (context) => CoordinateBloc(),
-        child: CoordinatePage(),
+        create: (context) => LocatorBloc(),
+        child: LocatorPage(),
       ),
     );
   }

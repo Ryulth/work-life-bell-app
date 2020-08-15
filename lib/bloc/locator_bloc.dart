@@ -6,28 +6,28 @@ import 'package:background_locator/location_dto.dart';
 import 'package:background_locator/location_settings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location_permissions/location_permissions.dart';
-import 'package:worklifebellapp/event/coordinate_event.dart';
-import 'package:worklifebellapp/state/coordinate_state.dart';
+import 'package:worklifebellapp/event/locator_event.dart';
+import 'package:worklifebellapp/state/locator_state.dart';
 
-class CoordinateBloc extends Bloc<CoordinateEvent, CoordinateState> {
+class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
   ReceivePort port = ReceivePort();
   static const String _isolateName = 'LocatorIsolate';
 
   @override
-  CoordinateState get initialState => CoordinateUninitialized();
+  LocatorState get initialState => LocatorUninitialized();
 
   @override
-  Stream<CoordinateState> mapEventToState(CoordinateEvent event) async* {
-    if (event is CoordinateLoggingStart) {
-      yield* _mapCoordinateLoggingStartToState(event);
-    } else if (event is CoordinateLoggingStop) {
-      yield* _mapCoordinateLoggingStopToState(event);
-    } else if (event is CoordinateLoggingUpdate) {
-      yield* _mapCoordinateLoggingUpdateToState(event);
+  Stream<LocatorState> mapEventToState(LocatorEvent event) async* {
+    if (event is LocatorLoggingStart) {
+      yield* _mapLocatorLoggingStartToState(event);
+    } else if (event is LocatorLoggingStop) {
+      yield* _mapLocatorLoggingStopToState(event);
+    } else if (event is LocatorLoggingUpdate) {
+      yield* _mapLocatorLoggingUpdateToState(event);
     }
   }
 
-  CoordinateBloc() {
+  LocatorBloc() {
     if (IsolateNameServer.lookupPortByName(_isolateName) != null) {
       IsolateNameServer.removePortNameMapping(_isolateName);
     }
@@ -43,31 +43,31 @@ class CoordinateBloc extends Bloc<CoordinateEvent, CoordinateState> {
   }
 
   Future<void> updateState(LocationDto locationDto) async {
-    this.add(CoordinateLoggingUpdate(locationDto));
+    this.add(LocatorLoggingUpdate(locationDto));
   }
 
 
-  Stream<CoordinateState> _mapCoordinateLoggingStartToState(
-      CoordinateLoggingStart event) async* {
-    if (state is! CoordinateLoaded) {
+  Stream<LocatorState> _mapLocatorLoggingStartToState(
+      LocatorLoggingStart event) async* {
+    if (state is! LocatorLoaded) {
       if (await _checkLocationPermission()) {
         _startLocator();
-        yield CoordinateLoaded();
+        yield LocatorLoaded();
       }
     }
   }
 
-  Stream<CoordinateState> _mapCoordinateLoggingStopToState(
-      CoordinateLoggingStop event) async* {
+  Stream<LocatorState> _mapLocatorLoggingStopToState(
+      LocatorLoggingStop event) async* {
     BackgroundLocator.unRegisterLocationUpdate();
-    yield CoordinateUninitialized();
+    yield LocatorUninitialized();
 
   }
 
-  Stream<CoordinateState> _mapCoordinateLoggingUpdateToState(
-      CoordinateLoggingUpdate event) async* {
-    if (state is CoordinateLoaded) {
-      yield CoordinateLoaded(locationDto: event.locationDto);
+  Stream<LocatorState> _mapLocatorLoggingUpdateToState(
+      LocatorLoggingUpdate event) async* {
+    if (state is LocatorLoaded) {
+      yield LocatorLoaded(locationDto: event.locationDto);
     }
   }
 
@@ -102,7 +102,7 @@ class CoordinateBloc extends Bloc<CoordinateEvent, CoordinateState> {
           notificationTitle: "Work Life Bell",
           notificationMsg: "Tracking Work Distance",
           distanceFilter: 10,
-          wakeLockTime: 20,
+          wakeLockTime: 60, //default
           autoStop: false,
           interval: 10),
     );

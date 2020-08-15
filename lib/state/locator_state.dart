@@ -1,28 +1,28 @@
 import 'package:background_locator/location_dto.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class CoordinateState extends Equatable {
-  const CoordinateState();
+abstract class LocatorState extends Equatable {
+  const LocatorState();
 
   @override
   List<Object> get props => [];
 }
 
-class CoordinateUninitialized extends CoordinateState {}
+class LocatorUninitialized extends LocatorState {}
 
-class CoordinateError extends CoordinateState {}
+class LocatorError extends LocatorState {}
 
-class CoordinateLoaded extends CoordinateState {
+class LocatorLoaded extends LocatorState {
   final LocationDto locationDto;
 
-  const CoordinateLoaded({
+  const LocatorLoaded({
     this.locationDto,
   });
 
-  CoordinateLoaded copyWith({
+  LocatorLoaded copyWith({
     LocationDto locationDto,
   }) {
-    return CoordinateLoaded(
+    return LocatorLoaded(
       locationDto: locationDto ?? this.locationDto,
     );
   }
@@ -32,5 +32,5 @@ class CoordinateLoaded extends CoordinateState {
 
   @override
   String toString() =>
-      'CoordinateLoaded { locationDto: $locationDto }';
+      'LocatorLoaded { locationDto: $locationDto }';
 }
