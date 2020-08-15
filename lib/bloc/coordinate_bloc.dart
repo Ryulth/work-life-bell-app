@@ -101,9 +101,10 @@ class CoordinateBloc extends Bloc<CoordinateEvent, CoordinateState> {
       settings: LocationSettings(
           notificationTitle: "Work Life Bell",
           notificationMsg: "Tracking Work Distance",
+          distanceFilter: 10,
           wakeLockTime: 20,
           autoStop: false,
-          interval: 5),
+          interval: 10),
     );
   }
 
