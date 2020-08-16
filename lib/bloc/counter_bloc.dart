@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:worklifebellapp/event/counter_event.dart';
-import 'package:worklifebellapp/state/counter_state.dart';
+import 'package:worklifebell_app/event/counter_event.dart';
+import 'package:worklifebell_app/state/counter_state.dart';
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
   @override

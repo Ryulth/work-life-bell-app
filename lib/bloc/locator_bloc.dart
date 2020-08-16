@@ -6,8 +6,8 @@ import 'package:background_locator/location_dto.dart';
 import 'package:background_locator/location_settings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location_permissions/location_permissions.dart';
-import 'package:worklifebellapp/event/locator_event.dart';
-import 'package:worklifebellapp/state/locator_state.dart';
+import 'package:worklifebell_app/event/locator_event.dart';
+import 'package:worklifebell_app/state/locator_state.dart';
 
 class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
   ReceivePort port = ReceivePort();

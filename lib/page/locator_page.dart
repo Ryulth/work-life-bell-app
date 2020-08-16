@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:worklifebellapp/bloc/locator_bloc.dart';
-import 'package:worklifebellapp/event/locator_event.dart';
-import 'package:worklifebellapp/state/locator_state.dart';
+import 'package:worklifebell_app/bloc/locator_bloc.dart';
+import 'package:worklifebell_app/event/locator_event.dart';
+import 'package:worklifebell_app/state/locator_state.dart';
 
 class LocatorPage extends StatelessWidget {
 

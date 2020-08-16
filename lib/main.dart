@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:worklifebellapp/bloc/locator_bloc.dart';
-import 'package:worklifebellapp/event/counter_event.dart';
-import 'package:worklifebellapp/page/locator_page.dart';
-import 'package:worklifebellapp/state/counter_state.dart';
+import 'package:worklifebell_app/bloc/locator_bloc.dart';
+import 'package:worklifebell_app/event/counter_event.dart';
+import 'package:worklifebell_app/page/locator_page.dart';
+import 'package:worklifebell_app/state/counter_state.dart';
 
 import 'bloc/counter_bloc.dart';
 
