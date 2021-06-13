@@ -50,17 +50,16 @@ class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
 
   Stream<LocatorState> _mapLocatorLoggingStartToState(
       LocatorLoggingStart event) async* {
-    if (state is! LocatorLoaded) {
-      if (await _checkLocationPermission()) {
-        _startLocator();
-        yield LocatorLoaded();
-      }
+    _stopLocator();
+    if (await _checkLocationPermission()) {
+      _startLocator();
+      yield LocatorLoaded();
     }
   }
 
   Stream<LocatorState> _mapLocatorLoggingStopToState(
       LocatorLoggingStop event) async* {
-    BackgroundLocator.unRegisterLocationUpdate();
+    _stopLocator();
     yield LocatorUninitialized();
   }
 
@@ -116,6 +115,11 @@ class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
                     'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
                 notificationIconColor: Colors.grey,
                 notificationTapCallback: notificationCallback)));
+  }
+
+  void _stopLocator() {
+    print("Stop Locator");
+    BackgroundLocator.unRegisterLocationUpdate();
   }
 
   static void callback(LocationDto locationDto) async {
