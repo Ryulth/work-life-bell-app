@@ -4,7 +4,8 @@ import 'package:worklifebell_app/event/counter_event.dart';
 import 'package:worklifebell_app/state/counter_state.dart';
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-  @override
+  CounterBloc(CounterState initialState) : super(initialState);
+
   CounterState get initialState => CounterUninitialized();
 
   @override

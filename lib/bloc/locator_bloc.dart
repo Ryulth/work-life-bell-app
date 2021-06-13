@@ -3,17 +3,34 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'package:background_locator/background_locator.dart';
 import 'package:background_locator/location_dto.dart';
-import 'package:background_locator/location_settings.dart';
+import 'package:background_locator/settings/android_settings.dart';
+import 'package:background_locator/settings/ios_settings.dart';
+import 'package:background_locator/settings/locator_settings.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:worklifebell_app/event/locator_event.dart';
 import 'package:worklifebell_app/state/locator_state.dart';
 
 class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
+  LocatorBloc() : super(null) {
+    if (IsolateNameServer.lookupPortByName(_isolateName) != null) {
+      IsolateNameServer.removePortNameMapping(_isolateName);
+    }
+
+    IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
+    BackgroundLocator.initialize();
+
+    port.listen(
+      (dynamic data) async {
+        await updateState(data);
+      },
+    );
+  }
+
   ReceivePort port = ReceivePort();
   static const String _isolateName = 'LocatorIsolate';
 
-  @override
   LocatorState get initialState => LocatorUninitialized();
 
   @override
@@ -27,25 +44,9 @@ class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
     }
   }
 
-  LocatorBloc() {
-    if (IsolateNameServer.lookupPortByName(_isolateName) != null) {
-      IsolateNameServer.removePortNameMapping(_isolateName);
-    }
-
-    IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
-    BackgroundLocator.initialize();
-
-    port.listen(
-          (dynamic data) async {
-        await updateState(data);
-      },
-    );
-  }
-
   Future<void> updateState(LocationDto locationDto) async {
     this.add(LocatorLoggingUpdate(locationDto));
   }
-
 
   Stream<LocatorState> _mapLocatorLoggingStartToState(
       LocatorLoggingStart event) async* {
@@ -61,7 +62,6 @@ class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
       LocatorLoggingStop event) async* {
     BackgroundLocator.unRegisterLocationUpdate();
     yield LocatorUninitialized();
-
   }
 
   Stream<LocatorState> _mapLocatorLoggingUpdateToState(
@@ -95,17 +95,27 @@ class LocatorBloc extends Bloc<LocatorEvent, LocatorState> {
 
   void _startLocator() {
     print("start Locator");
-    BackgroundLocator.registerLocationUpdate(
-      callback,
-      androidNotificationCallback: notificationCallback,
-      settings: LocationSettings(
-          notificationTitle: "Work Life Bell",
-          notificationMsg: "Tracking Work Distance",
-          distanceFilter: 10,
-          wakeLockTime: 60, //default
-          autoStop: false,
-          interval: 10),
-    );
+    BackgroundLocator.registerLocationUpdate(callback,
+        disposeCallback: notificationCallback,
+        iosSettings: IOSSettings(
+            accuracy: LocationAccuracy.NAVIGATION,
+            distanceFilter: 10,
+            showsBackgroundLocationIndicator: true),
+        autoStop: false,
+        androidSettings: AndroidSettings(
+            accuracy: LocationAccuracy.NAVIGATION,
+            interval: 0,
+            distanceFilter: 10,
+            wakeLockTime: 60,
+            client: LocationClient.google,
+            androidNotificationSettings: AndroidNotificationSettings(
+                notificationChannelName: 'Location tracking',
+                notificationTitle: 'Work Life Bell',
+                notificationMsg: 'Tracking Work Distance',
+                notificationBigMsg:
+                    'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+                notificationIconColor: Colors.grey,
+                notificationTapCallback: notificationCallback)));
   }
 
   static void callback(LocationDto locationDto) async {
